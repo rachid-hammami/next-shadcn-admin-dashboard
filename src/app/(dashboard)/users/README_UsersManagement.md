@@ -1,67 +1,63 @@
 # 👥 Users Management Module
 
-This module provides a **complete, autonomous, and production-ready** user management interface built with **Next.js**, **Shadcn/UI**, and **TanStack Table**.
+This module provides the **Users Management UI foundation** for the admin dashboard.
 
-## 🧭 Overview
+It is intentionally **frontend-only** and designed to align with the project’s current scope and the upcoming RBAC roadmap.
 
-- View, search, sort, and paginate users  
-- Edit user information (name, email)  
-- Update user roles and statuses  
-- Suspend or delete users  
-- Works **with or without a backend**
+---
 
-If no backend is available, the module automatically switches to **Demo Mode** using fake data.
+## 🎯 Purpose
 
-## ⚙️ Dual Mode Operation
+- Display a list of users
+- Show user roles and statuses
+- Enable or disable users
+- Provide a clean, extensible UI base
 
-| Mode | Description | How to activate |
-|------|--------------|-----------------|
-| **Demo mode (default)** | Generates 25 fake users using `/src/lib/demo-users.ts`. | `.env.local`: `NEXT_PUBLIC_DEMO_MODE=true` |
-| **Production mode** | Fetches real users from `/api/users` and updates via `/api/users/:id`. | `.env.local`: `NEXT_PUBLIC_DEMO_MODE=false` |
+No backend logic is included at this stage.
 
-If the backend is unreachable, the system automatically falls back to demo mode and shows:
-> “ℹ️ Backend unavailable — switched to demo mode”
+---
 
-## 🧩 Component Structure
+## ✨ Current Features
+
+- Users table built with **TanStack Table**
+- Pagination
+- User status: **Active / Disabled**
+- Enable / Disable action per user
+- Clear **“coming soon”** placeholders for future features
+
+---
+
+## 🚫 Out of Scope (by design)
+
+The following features are intentionally **not implemented**:
+
+- Creating users
+- Editing user details
+- Deleting users
+- Backend API integration
+- Demo / production mode switching
+
+These elements are planned for future iterations.
+
+---
+
+## 📂 Location
 
 ```
-src/app/users/
-├─ components/
-│  ├─ UsersTable.tsx
-│  ├─ UserDropdown.tsx
-│  ├─ UserBadge.tsx
-│  ├─ UserActions.tsx
-├─ columns.tsx
-└─ README_UsersManagement.md
+src/app/(dashboard)/users/
 ```
 
-## 🔗 Backend Integration
+---
 
-Expected API routes:
+## 🔮 Future Work
 
-| Method | Route | Description |
-|--------|--------|-------------|
-| `GET` | `/api/users` | Fetch all users |
-| `PATCH` | `/api/users/:id` | Update user fields |
+- Backend integration
+- Full RBAC enforcement
+- User creation and editing
+- Role assignment from the Users module
 
-## 🚀 Quick Start
+---
 
-```bash
-# 1. Clone
-git clone https://github.com/<owner>/next-shadcn-admin-dashboard.git
-cd next-shadcn-admin-dashboard
+## ✅ Status
 
-# 2. Install
-npm install
-
-# 3. Run in demo mode
-echo "NEXT_PUBLIC_DEMO_MODE=true" > .env.local
-npm run dev
-
-# 4. Visit
-http://localhost:3000/users
-```
-
-✅ You’ll see a fully interactive demo table with fake users.
-
-© 2026 – Users Management Module
+The module is stable, readable, and ready to be extended without breaking the current architecture.

@@ -16,6 +16,7 @@ import {
   ShoppingBag,
   SquareArrowUpRight,
   Users,
+  Shield,
 } from "lucide-react";
 
 export interface NavSubItem {
@@ -130,9 +131,8 @@ export const sidebarItems: NavGroup[] = [
       },
       {
         title: "Roles",
-        url: "/dashboard/coming-soon",
-        icon: Lock,
-        comingSoon: true,
+        url: "/roles",
+        icon: Shield,
       },
       {
         title: "Authentication",
