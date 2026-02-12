@@ -1,7 +1,8 @@
 "use client"
 
+import { columns } from "./columns"
+
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
@@ -27,23 +28,16 @@ import {
 
 import { Button } from "@/components/ui/button"
 
-import type { User } from "../page"
-import type { RBACUser } from "@/lib/rbac"
+import type { User } from "../_data/users"
 
 interface UsersTableProps {
-  columns: ColumnDef<User>[]
   data: User[]
-  
 }
 
-export default function UsersTable({
-  columns,
-  data,
-}: UsersTableProps) {
+export default function UsersTable({ data }: UsersTableProps) {
   const table = useReactTable({
     data,
     columns,
-    
     initialState: {
       pagination: {
         pageSize: 5,
@@ -113,7 +107,7 @@ export default function UsersTable({
               table.setPageSize(Number(value))
             }
           >
-            <SelectTrigger className="w-[80px] cursor-pointer [&>svg]:text-foreground [&>svg]:opacity-100 hover:bg-muted">
+            <SelectTrigger className="w-[80px]">
               <SelectValue />
             </SelectTrigger>
 

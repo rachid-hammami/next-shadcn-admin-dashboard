@@ -1,63 +1,62 @@
 # 👥 Users Management Module
 
-This module provides the **Users Management UI foundation** for the admin dashboard.
+This module provides a fully independent, frontend-only implementation
+of the Users Management feature for the admin dashboard.
 
-It is intentionally **frontend-only** and designed to align with the project’s current scope and the upcoming RBAC roadmap.
+It has been refactored to remove all dependencies on RBAC and Role
+Management, ensuring complete modularity and safe integration.
 
----
+------------------------------------------------------------------------
 
 ## 🎯 Purpose
 
-- Display a list of users
-- Show user roles and statuses
-- Enable or disable users
-- Provide a clean, extensible UI base
+-   Display a list of users
+-   Show user roles and statuses
+-   Provide a clean and extensible UI structure
 
-No backend logic is included at this stage.
+This module serves as a standalone UI foundation ready for future
+backend integration.
 
----
+------------------------------------------------------------------------
 
-## ✨ Current Features
+## ✨ Key Characteristics
 
-- Users table built with **TanStack Table**
-- Pagination
-- User status: **Active / Disabled**
-- Enable / Disable action per user
-- Clear **“coming soon”** placeholders for future features
+-   Frontend-only implementation
+-   Static dataset (no API calls)
+-   Fully independent from RBAC
+-   Fully independent from Role Management
+-   No backend dependencies
+-   Modular and self-contained structure
 
----
+------------------------------------------------------------------------
 
-## 🚫 Out of Scope (by design)
+## 📂 Structure
 
-The following features are intentionally **not implemented**:
+    src/app/(dashboard)/users/
+    ├── _components/
+    ├── _data/
+    ├── page.tsx
+    ├── layout.tsx
+    └── README_UsersManagement.md
 
-- Creating users
-- Editing user details
-- Deleting users
-- Backend API integration
-- Demo / production mode switching
+------------------------------------------------------------------------
 
-These elements are planned for future iterations.
+## 🚫 Out of Scope (Intentional)
 
----
+The following features are intentionally not implemented:
 
-## 📂 Location
+-   Backend integration
+-   User creation persistence
+-   User editing persistence
+-   User deletion persistence
+-   RBAC enforcement
 
-```
-src/app/(dashboard)/users/
-```
+These features can be safely added later without modifying the current
+architecture.
 
----
-
-## 🔮 Future Work
-
-- Backend integration
-- Full RBAC enforcement
-- User creation and editing
-- Role assignment from the Users module
-
----
+------------------------------------------------------------------------
 
 ## ✅ Status
 
-The module is stable, readable, and ready to be extended without breaking the current architecture.
+This module is stable, isolated, and ready for integration or extension
+without impacting other modules.

@@ -1,13 +1,11 @@
 "use client"
 
 import type { ColumnDef } from "@tanstack/react-table"
-import type { User } from "../page"
+import type { User } from "../_data/users"
 
 import { UserActions } from "./UserActions"
 
-export const columns = (
-  onToggleStatus: (userId: string) => void
-): ColumnDef<User>[] => [
+export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "name",
     header: "Name",
@@ -17,41 +15,18 @@ export const columns = (
     header: "Email",
   },
   {
-    accessorKey: "roleId",
+    accessorKey: "role",
     header: "Role",
-    cell: ({ row }) => {
-      const roleId = row.original.roleId
-
-      return roleId ? (
-        <span className="capitalize">{roleId}</span>
-      ) : (
-        <span className="text-muted-foreground">—</span>
-      )
-    },
   },
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => (
-      <span
-        className={
-          row.original.status === "Active"
-            ? "text-emerald-600 font-medium"
-            : "text-muted-foreground"
-        }
-      >
-        {row.original.status}
-      </span>
-    ),
   },
   {
     id: "actions",
     header: "",
-    cell: ({ row }) => (
-      <UserActions
-        user={row.original}
-        onToggleStatus={onToggleStatus}
-      />
+    cell: ({ row }: { row: { original: User } }) => (
+      <UserActions user={row.original} />
     ),
   },
 ]

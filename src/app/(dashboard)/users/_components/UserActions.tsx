@@ -10,19 +10,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-import type { User } from "../page"
+import type { User } from "../_data/users"
 
 interface UserActionsProps {
   user: User
-  onToggleStatus: (userId: string) => void
 }
 
-export function UserActions({
-  user,
-  onToggleStatus,
-}: UserActionsProps) {
-  const isActive = user.status === "Active"
-
+export function UserActions({ user }: UserActionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -32,10 +26,11 @@ export function UserActions({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end">
-        <DropdownMenuItem
-          onClick={() => onToggleStatus(user.id)}
-        >
-          {isActive ? "Disable user" : "Enable user"}
+        <DropdownMenuItem>
+          Edit user
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          Delete user
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
