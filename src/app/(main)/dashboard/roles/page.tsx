@@ -24,7 +24,10 @@ function normalizeIncomingRole(role: Role): Role {
 }
 
 export default function RolesPage() {
-  const [roles, setRoles] = useState<Role[]>(demoRoles.map(normalizeIncomingRole))
+  const [roles, setRoles] = useState<Role[]>(
+    demoRoles.map(normalizeIncomingRole)
+  )
+
   const [editingRole, setEditingRole] = useState<Role | null>(null)
   const [selectedRole, setSelectedRole] = useState<Role | null>(null)
   const [isAddOpen, setIsAddOpen] = useState(false)
@@ -74,9 +77,11 @@ export default function RolesPage() {
         </div>
       )}
 
+      {/* ✅ existingRoles ajouté */}
       <AddRoleDialog
         open={isAddOpen}
         onClose={() => setIsAddOpen(false)}
+        existingRoles={roles}
         onConfirm={(role) => {
           setRoles((prev) => [...prev, normalizeIncomingRole(role)])
           setIsAddOpen(false)
@@ -86,13 +91,18 @@ export default function RolesPage() {
       {editingRole && (
         <EditRoleDialog
           role={editingRole}
+          existingRoles={roles}
           onClose={() => {
             setSelectedRole(null)
             setEditingRole(null)
           }}
           onConfirm={(updated) => {
             const normalized = normalizeIncomingRole(updated)
-            setRoles((prev) => prev.map((r) => (r.id === normalized.id ? normalized : r)))
+            setRoles((prev) =>
+              prev.map((r) =>
+                r.id === normalized.id ? normalized : r
+              )
+            )
           }}
         />
       )}

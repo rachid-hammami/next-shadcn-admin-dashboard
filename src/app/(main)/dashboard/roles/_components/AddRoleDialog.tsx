@@ -29,34 +29,46 @@ import type { Role } from "../_data/roles"
 
 const RESERVED_ROLE_NAMES = ["admin", "super_admin", "root"]
 
-const schema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(2, "Name is too short")
-    .max(50)
-    .refine(
-      (v) => !RESERVED_ROLE_NAMES.includes(v.toLowerCase()),
-      "This role name is reserved"
-    ),
-  description: z.string().max(255).optional().or(z.literal("")),
-})
-
-type FormValues = z.infer<typeof schema>
-
 interface AddRoleDialogProps {
   open: boolean
   onClose: () => void
   onConfirm: (role: Role) => void
+  existingRoles: Role[]
 }
 
-const normalizeRoleName = (value: string) => {
-  const normalized = value.trim().toLowerCase()
-  return normalized.charAt(0).toUpperCase() + normalized.slice(1)
-}
-
-export function AddRoleDialog({ open, onClose, onConfirm }: AddRoleDialogProps) {
+export function AddRoleDialog({
+  open,
+  onClose,
+  onConfirm,
+  existingRoles,
+}: AddRoleDialogProps) {
   const [loading, setLoading] = React.useState(false)
+
+  const schema = React.useMemo(
+    () =>
+      z.object({
+        name: z
+          .string()
+          .trim()
+          .min(2, "Name is too short")
+          .max(50)
+          .refine(
+            (v) => !RESERVED_ROLE_NAMES.includes(v.toLowerCase()),
+            "This role name is reserved"
+          )
+          .refine(
+            (v) =>
+              !existingRoles.some(
+                (r) => r.name.toLowerCase() === v.toLowerCase()
+              ),
+            "A role with this name already exists"
+          ),
+        description: z.string().max(255).optional().or(z.literal("")),
+      }),
+    [existingRoles]
+  )
+
+  type FormValues = z.infer<typeof schema>
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -67,17 +79,16 @@ export function AddRoleDialog({ open, onClose, onConfirm }: AddRoleDialogProps) 
     try {
       setLoading(true)
 
-      const now = new Date().toISOString()
       const newRole: Role = {
-        id: String(Date.now()),
-        name: normalizeRoleName(values.name),
-        description: values.description?.trim() || "",
-        usersCount: 0,
-        status: "Active",
-        isSystem: false,
-        createdAt: now,
-        permissions: [],
-      }
+  id: String(Date.now()),
+  name: values.name.trim(),
+  description: values.description?.trim() || "",
+  usersCount: 0,
+  status: "Active",
+  isSystem: false,
+  createdAt: new Date().toISOString(),
+  permissions: [],
+}
 
       toast.success("Role created successfully")
       form.reset()

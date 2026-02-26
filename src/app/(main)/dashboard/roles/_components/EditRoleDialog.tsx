@@ -29,33 +29,48 @@ import type { Role } from "../_data/roles"
 
 const RESERVED_ROLE_NAMES = ["admin", "super_admin", "root"]
 
-const schema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(2, "Name is too short")
-    .max(50)
-    .refine(
-      (v) => !RESERVED_ROLE_NAMES.includes(v.toLowerCase()),
-      "This role name is reserved"
-    ),
-  description: z.string().max(255).optional().or(z.literal("")),
-})
-
-type FormValues = z.infer<typeof schema>
-
 interface EditRoleDialogProps {
   role: Role
+  existingRoles: Role[]
   onClose: () => void
   onConfirm: (role: Role) => void
 }
 
 export function EditRoleDialog({
   role,
+  existingRoles,
   onClose,
   onConfirm,
 }: EditRoleDialogProps) {
   const [loading, setLoading] = React.useState(false)
+
+  const schema = React.useMemo(
+    () =>
+      z.object({
+        name: z
+          .string()
+          .trim()
+          .min(2, "Name is too short")
+          .max(50)
+          .refine(
+            (v) => !RESERVED_ROLE_NAMES.includes(v.toLowerCase()),
+            "This role name is reserved"
+          )
+          .refine(
+            (v) =>
+              !existingRoles.some(
+                (r) =>
+                  r.id !== role.id &&
+                  r.name.toLowerCase() === v.toLowerCase()
+              ),
+            "A role with this name already exists"
+          ),
+        description: z.string().max(255).optional().or(z.literal("")),
+      }),
+    [existingRoles, role.id]
+  )
+
+  type FormValues = z.infer<typeof schema>
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
