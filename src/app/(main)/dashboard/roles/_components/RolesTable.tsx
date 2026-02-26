@@ -81,18 +81,22 @@ export default function RolesTable({
                   className={`border-t ${isSelected ? "bg-muted" : ""}`}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <td
-                      key={cell.id}
-                      className="p-2 text-sm"
-                      onClick={() => {
-                        if (
-                          cell.column.id === "name" ||
-                          cell.column.id === "description"
-                        ) {
-                          onSelect(row.original)
-                        }
-                      }}
-                    >
+                                          <td
+                        key={cell.id}
+                        className={`p-2 text-sm ${
+                          cell.column.id === "name" || cell.column.id === "description"
+                            ? "cursor-pointer"
+                            : ""
+                        }`}
+                        onClick={() => {
+                          if (
+                            cell.column.id === "name" ||
+                            cell.column.id === "description"
+                          ) {
+                            onSelect(row.original)
+                          }
+                        }}
+                      >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
