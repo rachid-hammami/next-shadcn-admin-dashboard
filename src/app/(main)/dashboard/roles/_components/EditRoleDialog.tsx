@@ -27,10 +27,22 @@ import {
 
 import type { Role } from "../_data/roles"
 
+const RESERVED_ROLE_NAMES = ["admin", "super_admin", "root"]
+
 const schema = z.object({
-  name: z.string().min(2).max(50),
+  name: z
+    .string()
+    .trim()
+    .min(2, "Name is too short")
+    .max(50)
+    .refine(
+      (v) => !RESERVED_ROLE_NAMES.includes(v.toLowerCase()),
+      "This role name is reserved"
+    ),
   description: z.string().max(255).optional().or(z.literal("")),
 })
+
+type FormValues = z.infer<typeof schema>
 
 interface EditRoleDialogProps {
   role: Role
@@ -38,10 +50,14 @@ interface EditRoleDialogProps {
   onConfirm: (role: Role) => void
 }
 
-export function EditRoleDialog({ role, onClose, onConfirm }: EditRoleDialogProps) {
+export function EditRoleDialog({
+  role,
+  onClose,
+  onConfirm,
+}: EditRoleDialogProps) {
   const [loading, setLoading] = React.useState(false)
 
-  const form = useForm({
+  const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
       name: role.name,
@@ -49,14 +65,14 @@ export function EditRoleDialog({ role, onClose, onConfirm }: EditRoleDialogProps
     },
   })
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: FormValues) => {
     try {
       setLoading(true)
 
       const updatedRole: Role = {
         ...role,
-        name: String(values.name).trim(),
-        description: String(values.description ?? "").trim(),
+        name: values.name.trim(),
+        description: values.description?.trim() || "",
       }
 
       toast.success("Role updated successfully")
