@@ -10,24 +10,8 @@ import { RolePermissions } from "./_components/RolePermissions"
 import { Button } from "@/components/ui/button"
 import { demoRoles, type Role } from "./_data/roles"
 
-function normalizeIncomingRole(role: Role): Role {
-  return {
-    id: String(role?.id ?? Date.now()),
-    name: String(role?.name ?? "").trim(),
-    description: String(role?.description ?? "").trim(),
-    usersCount: Number(role?.usersCount ?? 0),
-    status: role?.status === "Disabled" ? "Disabled" : "Active",
-    isSystem: Boolean(role?.isSystem ?? false),
-    createdAt: String(role?.createdAt ?? new Date().toISOString()),
-    permissions: Array.isArray(role?.permissions) ? role.permissions : [],
-  }
-}
-
 export default function RolesPage() {
-  const [roles, setRoles] = useState<Role[]>(
-    demoRoles.map(normalizeIncomingRole)
-  )
-
+  const [roles, setRoles] = useState<Role[]>(demoRoles)
   const [editingRole, setEditingRole] = useState<Role | null>(null)
   const [selectedRole, setSelectedRole] = useState<Role | null>(null)
   const [isAddOpen, setIsAddOpen] = useState(false)
@@ -77,13 +61,13 @@ export default function RolesPage() {
         </div>
       )}
 
-      {/* ✅ existingRoles ajouté */}
+      {/* Add Role Dialog */}
       <AddRoleDialog
         open={isAddOpen}
         onClose={() => setIsAddOpen(false)}
         existingRoles={roles}
         onConfirm={(role) => {
-          setRoles((prev) => [...prev, normalizeIncomingRole(role)])
+          setRoles((prev) => [...prev, role])
           setIsAddOpen(false)
         }}
       />
@@ -97,11 +81,8 @@ export default function RolesPage() {
             setEditingRole(null)
           }}
           onConfirm={(updated) => {
-            const normalized = normalizeIncomingRole(updated)
             setRoles((prev) =>
-              prev.map((r) =>
-                r.id === normalized.id ? normalized : r
-              )
+              prev.map((r) => (r.id === updated.id ? updated : r))
             )
           }}
         />

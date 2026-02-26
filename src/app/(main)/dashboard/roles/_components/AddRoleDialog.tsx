@@ -80,15 +80,15 @@ export function AddRoleDialog({
       setLoading(true)
 
       const newRole: Role = {
-  id: String(Date.now()),
-  name: values.name.trim(),
-  description: values.description?.trim() || "",
-  usersCount: 0,
-  status: "Active",
-  isSystem: false,
-  createdAt: new Date().toISOString(),
-  permissions: [],
-}
+                              id: crypto.randomUUID(),
+                              name: values.name.trim(),
+                              description: values.description?.trim() || "",
+                              usersCount: 0,
+                              status: "Active",
+                              isSystem: false,
+                              createdAt: new Date().toISOString(),
+                              permissions: [],
+                            }
 
       toast.success("Role created successfully")
       form.reset()
