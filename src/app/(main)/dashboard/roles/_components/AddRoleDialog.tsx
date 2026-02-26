@@ -29,6 +29,11 @@ import type { Role } from "../_data/roles"
 
 const RESERVED_ROLE_NAMES = ["admin", "super_admin", "root"]
 
+function normalizeRoleName(value: string): string {
+  const normalized = value.trim().toLowerCase()
+  return normalized.charAt(0).toUpperCase() + normalized.slice(1)
+}
+
 interface AddRoleDialogProps {
   open: boolean
   onClose: () => void
@@ -80,15 +85,15 @@ export function AddRoleDialog({
       setLoading(true)
 
       const newRole: Role = {
-                              id: crypto.randomUUID(),
-                              name: values.name.trim(),
-                              description: values.description?.trim() || "",
-                              usersCount: 0,
-                              status: "Active",
-                              isSystem: false,
-                              createdAt: new Date().toISOString(),
-                              permissions: [],
-                            }
+        id: crypto.randomUUID(),
+        name: normalizeRoleName(values.name),
+        description: values.description?.trim() || "",
+        usersCount: 0,
+        status: "Active",
+        isSystem: false,
+        createdAt: new Date().toISOString(),
+        permissions: [],
+      }
 
       toast.success("Role created successfully")
       form.reset()

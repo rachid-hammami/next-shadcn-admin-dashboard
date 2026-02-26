@@ -29,6 +29,11 @@ import type { Role } from "../_data/roles"
 
 const RESERVED_ROLE_NAMES = ["admin", "super_admin", "root"]
 
+function normalizeRoleName(value: string): string {
+  const normalized = value.trim().toLowerCase()
+  return normalized.charAt(0).toUpperCase() + normalized.slice(1)
+}
+
 interface EditRoleDialogProps {
   role: Role
   existingRoles: Role[]
@@ -86,7 +91,7 @@ export function EditRoleDialog({
 
       const updatedRole: Role = {
         ...role,
-        name: values.name.trim(),
+        name: normalizeRoleName(values.name),
         description: values.description?.trim() || "",
       }
 
